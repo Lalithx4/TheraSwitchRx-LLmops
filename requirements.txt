@@ -1,0 +1,16 @@
+# Web Framework
+Flask==2.3.3
+Flask-CORS==4.0.0
+
+# AI/ML Dependencies
+langchain
+langchain-community
+langchain_groq
+chromadb
+pandas
+python-dotenv
+sentence-transformers
+langchain_huggingface
+
+# Additional dependencies
+requests==2.31.0

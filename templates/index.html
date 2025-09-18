@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheraSwitchRx | by MedQ AI - Medical Alternatives Recommender</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            padding: 40px;
+            animation: fadeIn 0.5s ease-out;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 30px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            gap: 20px;
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .api-access-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .api-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .api-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .docs-btn {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            color: white;
+        }
+
+        .docs-btn:hover {
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .key-btn {
+            background: white;
+            color: #667eea;
+            border-color: #667eea;
+        }
+
+        .key-btn:hover {
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .api-icon {
+            font-size: 1rem;
+        }
+
+        .api-info {
+            text-align: right;
+        }
+
+        .api-tag {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Compact API Links */
+        .api-compact {
+            text-align: center;
+            margin: 8px 0;
+        }
+
+        .api-link {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: 0 4px;
+            font-size: 0.7rem;
+            color: #718096;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .api-link:hover {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        h1 {
+            color: #1a202c;
+            font-size: 3rem;
+            margin-bottom: 8px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-subtitle {
+            color: #4a5568;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        .subtitle {
+            color: #718096;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            color: #4a5568;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .search-container {
+            position: relative;
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+
+        .search-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(135deg, #2c5282 0%, #2a4365 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.2);
+        }
+
+        .search-btn:active {
+            transform: translateY(0);
+        }
+
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loader.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #3182ce;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results-section {
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .results-title {
+            color: #2d3748;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .disclaimer {
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .disclaimer-title {
+            color: #e67e22;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .disclaimer-text {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .recommendation-content {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 28px;
+            line-height: 1.8;
+            color: #2d3748;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            animation: slideInUp 0.5s ease-out;
+            font-size: 1.05rem;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .recommendation-content h3 {
+            color: #2d3748;
+            margin: 24px 0 16px 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+            border-left: 4px solid #3182ce;
+            padding-left: 16px;
+        }
+
+        .recommendation-content h4 {
+            color: #4a5568;
+            margin: 20px 0 12px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .recommendation-content ul {
+            margin: 16px 0 20px 24px;
+            padding-left: 0;
+        }
+
+        .recommendation-content li {
+            margin-bottom: 10px;
+            padding-left: 8px;
+            position: relative;
+        }
+
+        .recommendation-content li::before {
+            content: "•";
+            color: #3182ce;
+            font-weight: bold;
+            position: absolute;
+            left: -16px;
+        }
+
+        .recommendation-content strong {
+            color: #2d3748;
+            font-weight: 600;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .recommendation-content p {
+            margin-bottom: 16px;
+        }
+
+        .stats-banner {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(49, 130, 206, 0.2);
+        }
+
+        .search-progress {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: #f7fafc;
+            color: #718096;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            color: white;
+        }
+
+        .error-message {
+            background: #fee;
+            border-left: 4px solid #f56565;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #742a2a;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .footer {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            border: 1px solid #e2e8f0;
+            margin-top: 20px;
+        }
+
+        .footer-title {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-content {
+            line-height: 1.8;
+            color: #4a5568;
+            font-size: 16px;
+        }
+
+        .footer-content p {
+            margin-bottom: 18px;
+            text-align: justify;
+        }
+
+        .highlight {
+            color: #3182ce;
+            font-weight: 600;
+        }
+
+        .linkedin-link {
+            color: #3182ce;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .linkedin-link:hover {
+            color: #2c5282;
+            text-decoration: underline;
+        }
+
+        .author-info {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 4px solid #3182ce;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container, .footer {
+                padding: 25px 20px;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .footer-title {
+                font-size: 1.6rem;
+            }
+
+            .footer-content {
+                font-size: 15px;
+            }
+
+            .search-progress {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .progress-step {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .brand-subtitle {
+                font-size: 1rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .container, .footer {
+                padding: 20px 15px;
+            }
+
+            .footer-title {
+                font-size: 1.4rem;
+            }
+
+            .footer-content {
+                font-size: 14px;
+            }
+
+            .stats-banner {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+
+            .search-btn {
+                padding: 12px 20px;
+                font-size: 0.95rem;
+            }
+
+            input[type="text"] {
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+
+            .results-title {
+                font-size: 1.4rem;
+            }
+
+            .recommendation-content {
+                padding: 20px;
+                font-size: 1rem;
+            }
+
+            .recommendation-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .recommendation-content h4 {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .footer-title {
+                font-size: 1.2rem;
+            }
+
+            .footer-content {
+                font-size: 13px;
+            }
+
+            .brand-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .stats-banner {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+        <div class="header-section">
+            <h1>TheraSwitchRx</h1>
+            <p class="subtitle">Find generic alternatives and similar medicines instantly</p>
+            <div class="stats-banner">
+                🎯 AI-Powered • 6+ Lakh Medicines Trained • Instant Results • REST API
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <label for="search-input">Enter your medical needs (e.g., "alternatives for Shelcal", "medicines for headache", "generic for Crocin")</label>
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    placeholder="Type medicine name or condition..."
+                    autocomplete="off"
+                >
+                <button class="search-btn" id="search-btn" onclick="searchMedicines()">
+                    <span>🔍</span>
+                    <span>Search</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+            <p style="margin-top: 15px; color: #718096;">Getting AI-powered medical recommendations...</p>
+            <div class="search-progress" id="search-progress">
+                <div class="progress-step active" id="step1">
+                    <span>🔍</span>
+                    <span>Analyzing Query</span>
+                </div>
+                <div class="progress-step" id="step2">
+                    <span>🧠</span>
+                    <span>AI Processing</span>
+                </div>
+                <div class="progress-step" id="step3">
+                    <span>💊</span>
+                    <span>Finding Alternatives</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compact API Links -->
+        <div class="api-compact">
+            <a href="/api/docs" class="api-link" target="_blank">📖 API</a>
+            <a href="/get-api-key" class="api-link">🔑 Key</a>
+        </div>
+
+        <div class="results-section" id="results-section">
+            <div class="disclaimer">
+                <div class="disclaimer-title">
+                    ⚠️ Important Medical Disclaimer
+                </div>
+                <div class="disclaimer-text">
+                    This information is for educational purposes only. Always consult with a qualified healthcare provider before changing medications. Never self-medicate or change prescribed medications without medical supervision.
+                </div>
+            </div>
+
+            <div class="results-header">
+                <h2 class="results-title" id="results-title">Medicine Alternatives</h2>
+            </div>
+
+            <div id="recommendations-container"></div>
+        </div>
+        </div>
+
+        <div class="footer">
+            <h2 class="footer-title">About TheraSwitchRx</h2>
+            <div class="footer-content">
+                <p><span class="highlight">TheraSwitchRx</span> . I developed this project myself (<a href="https://www.linkedin.com/in/lalithsreevari/" target="_blank" class="linkedin-link">🔗 LinkedIn</a>) using a carefully curated dataset of <span class="highlight">6 lakh medicines</span> and a finetuned AI model.</p>
+                
+                <p>This isn't just another project where you feed data into a pipeline and get results. I  meticulously aggregated and validated data from trusted sources, and tested the system on popular medicines to ensure it provides accurate DATA, I built the system to recommend alternatives based on the same salts and formulations, making it reliable and medically relevant.</p>
+                
+                <p>Some might ask why I didn't just include millions of medicines like others do. My answer is simple: <span class="highlight">quality matters more than quantity</span>. I focused only on medicines from trusted, authentic sources, instead of blindly copy-pasting from the internet. At the same time, I am continuously working to add more medicines so the system becomes even more comprehensive without losing reliability.</p>
+                
+                <div class="author-info">
+                    <p><strong>Building TheraSwitchRx</strong> took not just technical skills, but also medical understanding and the ability to combine both effectively. For me, this project represents how AI can be used responsibly — delivering suggestions that are both <span class="highlight">intelligent and dependable</span>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isSearching = false;
+
+        async function searchMedicines() {
+            const searchInput = document.getElementById('search-input');
+            const searchBtn = document.getElementById('search-btn');
+            const query = searchInput.value.trim();
+            
+            if (!query) {
+                alert('Please enter a medicine name or condition');
+                return;
+            }
+
+            if (isSearching) {
+                return; // Prevent multiple simultaneous requests
+            }
+
+            isSearching = true;
+            
+            // Show loader and disable button
+            document.getElementById('loader').classList.add('active');
+            document.getElementById('results-section').classList.remove('active');
+            searchBtn.disabled = true;
+            searchBtn.innerHTML = '<span>⏳</span><span>Searching...</span>';
+
+            // Animate progress steps
+            animateSearchProgress();
+
+            try {
+                const response = await fetch('/api/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayResults(data.query, data.recommendation);
+                } else {
+                    showError(data.error || 'An error occurred while searching');
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                showError('Failed to connect to the server. Please try again.');
+            } finally {
+                // Hide loader and re-enable button
+                document.getElementById('loader').classList.remove('active');
+                searchBtn.disabled = false;
+                searchBtn.innerHTML = '<span>🔍</span><span>Search</span>';
+                isSearching = false;
+                resetProgressSteps();
+            }
+        }
+
+        function animateSearchProgress() {
+            const steps = ['step1', 'step2', 'step3'];
+            let currentStep = 0;
+
+            const interval = setInterval(() => {
+                // Remove active from previous step
+                if (currentStep > 0) {
+                    document.getElementById(steps[currentStep - 1]).classList.remove('active');
+                }
+                
+                // Add active to current step
+                if (currentStep < steps.length) {
+                    document.getElementById(steps[currentStep]).classList.add('active');
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 800);
+        }
+
+        function resetProgressSteps() {
+            const steps = ['step1', 'step2', 'step3'];
+            steps.forEach(step => {
+                document.getElementById(step).classList.remove('active');
+            });
+            document.getElementById('step1').classList.add('active');
+        }
+
+        function displayResults(query, recommendation) {
+            const resultsSection = document.getElementById('results-section');
+            const container = document.getElementById('recommendations-container');
+            const resultsTitle = document.getElementById('results-title');
+            
+            resultsSection.classList.add('active');
+
+            // Set title
+            resultsTitle.textContent = `AI-Powered Recommendations for "${query}"`;
+
+            // Clear previous results
+            container.innerHTML = '';
+
+            if (!recommendation || recommendation.trim() === '') {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <h3>No results found</h3>
+                        <p>Try searching with different keywords or medicine names</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Display the AI-generated recommendation in simple format
+            displaySimpleAIResponse(recommendation, container);
+        }
+
+        function displaySimpleAIResponse(recommendation, container) {
+            // Display the AI-generated recommendation in simple, clean format
+            const responseContainer = document.createElement('div');
+            responseContainer.className = 'recommendation-content';
+            
+            // Format the recommendation text (convert markdown-like formatting to HTML)
+            let formattedRecommendation = recommendation
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold text
+                .replace(/### (.*?)(\n|$)/g, '<h3>$1</h3>') // Headers
+                .replace(/## (.*?)(\n|$)/g, '<h4>$1</h4>') // Sub-headers
+                .replace(/• (.*?)(\n|$)/g, '<li>$1</li>') // List items
+                .replace(/\n\n/g, '</p><p>') // Paragraphs
+                .replace(/\n/g, '<br>'); // Line breaks
+
+            // Wrap list items in ul tags
+            formattedRecommendation = formattedRecommendation.replace(/(<li>.*?<\/li>)/g, '<ul>$1</ul>');
+            
+            // Wrap in paragraph tags if needed
+            if (!formattedRecommendation.includes('<h3>') && !formattedRecommendation.includes('<h4>') && !formattedRecommendation.includes('<p>')) {
+                formattedRecommendation = '<p>' + formattedRecommendation + '</p>';
+            }
+
+            responseContainer.innerHTML = formattedRecommendation;
+            container.appendChild(responseContainer);
+        }
+
+        function showError(message) {
+            const resultsSection = document.getElementById('results-section');
+            const container = document.getElementById('recommendations-container');
+            
+            resultsSection.classList.add('active');
+            
+            container.innerHTML = `
+                <div class="error-message">
+                    <strong>Error:</strong> ${message}
+                </div>
+            `;
+        }
+
+        // Handle Enter key press
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !isSearching) {
+                searchMedicines();
+            }
+        });
+
+        // Add some example searches on page load
+        window.onload = function() {
+            const examples = [
+                'alternatives for Paracetamol',
+                'generic medicines for diabetes',
+                'cheaper alternative to Shelcal',
+                'medicines containing Ibuprofen'
+            ];
+            const randomExample = examples[Math.floor(Math.random() * examples.length)];
+            document.getElementById('search-input').placeholder = `Try searching: "${randomExample}"`;
+        };
+
+        // Check backend health on page load
+        fetch('/api/health')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.pipeline_initialized) {
+                    showError('Medical recommendation system is initializing. Please wait a moment and try again.');
+                }
+            })
+            .catch(error => {
+                console.warn('Health check failed:', error);
+            });
+    </script>
+</body>
+</html>

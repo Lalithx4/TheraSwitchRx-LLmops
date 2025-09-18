@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get API Key - TheraSwitchRx</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #1a202c;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .plan-selector {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .plan-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .plan-card:hover {
+            border-color: #3182ce;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .plan-card.selected {
+            border-color: #3182ce;
+            background: #3182ce;
+            color: white;
+        }
+
+        .plan-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .plan-limit {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .plan-features {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .submit-btn {
+            background: #1a202c;
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background: #2d3748;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(26, 32, 44, 0.2);
+        }
+
+        .submit-btn:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .api-key-result {
+            background: #f0f9ff;
+            color: #1e40af;
+            border: 2px solid #3b82f6;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 30px;
+            display: none;
+            text-align: center;
+        }
+
+        .api-key-display {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            color: #1a202c;
+        }
+
+        .copy-btn {
+            background: #3182ce;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            margin: 5px 5px;
+        }
+
+        .copy-btn:hover {
+            background: #2c5282;
+        }
+
+        .usage-info {
+            background: #ebf8ff;
+            border: 2px solid #bee3f8;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .usage-info h4 {
+            color: #2b6cb0;
+            margin-bottom: 10px;
+        }
+
+        .error {
+            background: #fed7d7;
+            border: 2px solid #fc8181;
+            color: #742a2a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #718096;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #3182ce;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .back-link {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            background: #cbd5e0;
+            color: #2d3748;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .plan-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/" class="back-link">← Back to TheraSwitchRx</a>
+            <h1>🔑 Get Your API Key</h1>
+            <p>Access TheraSwitchRx medicine recommendations programmatically</p>
+        </div>
+        
+        <form id="api-key-form" class="form-section">
+            <div class="form-group">
+                <label for="email">📧 Email Address</label>
+                <input type="email" id="email" required placeholder="your@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="name">👤 Full Name</label>
+                <input type="text" id="name" required placeholder="Your Name">
+            </div>
+            
+            <div class="form-group">
+                <label>📊 Choose Your Plan</label>
+                <div class="plan-selector">
+                    <div class="plan-card selected" data-plan="free">
+                        <div class="plan-name">Free</div>
+                        <div class="plan-limit">100 requests/day</div>
+                        <div class="plan-features">Perfect for testing and development</div>
+                    </div>
+                </div>
+                <input type="hidden" id="plan" value="free">
+            </div>
+            
+            <button type="submit" class="submit-btn" id="submit-btn">
+                Generate API Key
+            </button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Generating your API key...</p>
+        </div>
+        
+        <div id="api-key-result" class="api-key-result">
+            <h3>✅ API Key Generated Successfully!</h3>
+            <p><strong>Your API Key:</strong></p>
+            <div class="api-key-display" id="api-key-display"></div>
+            <div>
+                <button class="copy-btn" onclick="copyApiKey()">📋 Copy API Key</button>
+                <button class="copy-btn" onclick="copyUsageExample()">📄 Copy Usage Example</button>
+            </div>
+            
+            <div class="usage-info">
+                <h4>📋 Usage Information</h4>
+                <p><strong>Plan:</strong> <span id="plan-type"></span></p>
+                <p><strong>Daily Limit:</strong> <span id="daily-limit"></span> requests</p>
+                <p><strong>Expires:</strong> <span id="expires-date"></span></p>
+                <p><strong>Base URL:</strong> <code>http://localhost:5000/api/v1</code></p>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                <strong>⚠️ Important:</strong> Save this API key securely. You won't be able to see it again!<br>
+                <strong>📖 Documentation:</strong> <a href="/api/docs" target="_blank" style="color: #fff; text-decoration: underline;">View API Documentation</a>
+            </div>
+        </div>
+        
+        <div id="error-message" class="error"></div>
+    </div>
+
+    <script>
+        let selectedPlan = 'free'; // Only free plan available
+        
+        // Form submission
+        document.getElementById('api-key-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value;
+            const plan = selectedPlan;
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('api-key-result').style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/v1/get-api-key', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, name, plan })
+                });
+                
+                const data = await response.json();
+                
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('submit-btn').disabled = false;
+                
+                if (data.success) {
+                    // Show success
+                    document.getElementById('api-key-display').textContent = data.data.api_key;
+                    document.getElementById('plan-type').textContent = data.data.plan.charAt(0).toUpperCase() + data.data.plan.slice(1);
+                    document.getElementById('daily-limit').textContent = data.data.daily_limit === -1 ? 'Unlimited' : data.data.daily_limit;
+                    document.getElementById('expires-date').textContent = new Date(data.data.expires_at).toLocaleDateString();
+                    
+                    document.getElementById('api-key-result').style.display = 'block';
+                    
+                    // Store for copy functions
+                    window.generatedApiKey = data.data.api_key;
+                } else {
+                    // Show error
+                    document.getElementById('error-message').textContent = data.error || 'Failed to generate API key';
+                    document.getElementById('error-message').style.display = 'block';
+                }
+            } catch (error) {
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('submit-btn').disabled = false;
+                
+                // Show error
+                document.getElementById('error-message').textContent = 'Network error. Please try again.';
+                document.getElementById('error-message').style.display = 'block';
+            }
+        });
+        
+        function copyApiKey() {
+            const apiKey = document.getElementById('api-key-display').textContent;
+            navigator.clipboard.writeText(apiKey).then(() => {
+                alert('✅ API key copied to clipboard!');
+            }).catch(err => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = apiKey;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ API key copied to clipboard!');
+            });
+        }
+        
+        function copyUsageExample() {
+            const apiKey = window.generatedApiKey;
+            const example = `// TheraSwitchRx API Usage Example
+const response = await fetch('http://localhost:5000/api/v1/search', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': '${apiKey}'
+    },
+    body: JSON.stringify({
+        query: 'alternatives for Paracetamol'
+    })
+});
+
+const data = await response.json();
+console.log(data);`;
+            
+            navigator.clipboard.writeText(example).then(() => {
+                alert('✅ Usage example copied to clipboard!');
+            }).catch(err => {
+                alert('❌ Could not copy example. Check console for the code.');
+                console.log(example);
+            });
+        }
+    </script>
+</body>
+</html>

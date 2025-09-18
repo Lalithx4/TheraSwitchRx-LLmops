@@ -1,0 +1,14 @@
+Metadata-Version: 2.4
+Name: MED-alteratives-Recommender
+Version: 0.1
+Author: Lalith
+Requires-Dist: langchain
+Requires-Dist: langchain-community
+Requires-Dist: langchain_groq
+Requires-Dist: chromadb
+Requires-Dist: pandas
+Requires-Dist: python-dotenv
+Requires-Dist: sentence-transformers
+Requires-Dist: langchain_huggingface
+Dynamic: author
+Dynamic: requires-dist

@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - TheraSwitchRx</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f8fafc;
+            line-height: 1.6;
+            color: #2d3748;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #718096;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .quick-start {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .section h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #4a5568;
+            margin: 25px 0 15px 0;
+            font-size: 1.3rem;
+        }
+
+        .endpoint {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            color: white;
+            font-size: 0.8rem;
+            margin-right: 10px;
+        }
+
+        .get { background: #48bb78; }
+        .post { background: #ed8936; }
+        .put { background: #3182ce; }
+        .delete { background: #e53e3e; }
+
+        .endpoint-url {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .auth-required {
+            background: #fef5e7;
+            color: #744210;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        code {
+            background: #edf2f7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #2d3748;
+        }
+
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+        }
+
+        .code-tabs {
+            display: flex;
+            background: #edf2f7;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+        }
+
+        .code-tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            background: #edf2f7;
+            border: none;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: #4a5568;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .code-tab.active {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
+        .code-content {
+            display: none;
+        }
+
+        .code-content.active {
+            display: block;
+        }
+
+        .response-example {
+            background: #f0fff4;
+            border: 1px solid #c6f6d5;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .error-example {
+            background: #fed7d7;
+            border: 1px solid #fc8181;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .plan-table th,
+        .plan-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .plan-table th {
+            background: #f7fafc;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 16px;
+            margin-top: 40px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            text-decoration: none;
+            color: #667eea;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .code-block {
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 10px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .code-tabs {
+                flex-wrap: wrap;
+            }
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-title">🔬 TheraSwitchRx API</div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/get-api-key">Get API Key</a>
+                <a href="#quick-start">Quick Start</a>
+                <a href="#endpoints">Endpoints</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>🚀 API Documentation</h1>
+            <p>Access TheraSwitchRx's powerful medicine recommendation engine through our REST API. Get AI-powered alternatives and detailed medicine information programmatically.</p>
+        </div>
+
+        <div id="quick-start" class="quick-start">
+            <h2>⚡ Quick Start</h2>
+            <p>Get started with the TheraSwitchRx API in just 3 steps:</p>
+            
+            <ol style="margin: 20px 0; padding-left: 20px;">
+                <li><strong>Get your API key:</strong> <a href="/get-api-key">Register here</a></li>
+                <li><strong>Make your first request</strong></li>
+                <li><strong>Build amazing healthcare apps!</strong></li>
+            </ol>
+
+            <div class="code-tabs">
+                <button class="code-tab active" onclick="showCode('javascript')">JavaScript</button>
+                <button class="code-tab" onclick="showCode('python')">Python</button>
+                <button class="code-tab" onclick="showCode('curl')">cURL</button>
+            </div>
+
+            <div class="code-block">
+                <div id="javascript" class="code-content active">
+                    <pre><button class="copy-btn" onclick="copyCode('js-code')">📋 Copy</button><code id="js-code">// TheraSwitchRx API - JavaScript Example
+const response = await fetch('http://localhost:5000/api/v1/search', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': 'tsx_your_api_key_here'
+    },
+    body: JSON.stringify({
+        query: 'alternatives for Paracetamol'
+    })
+});
+
+const data = await response.json();
+console.log(data.data.recommendation);</code></pre>
+                </div>
+
+                <div id="python" class="code-content">
+                    <pre><button class="copy-btn" onclick="copyCode('py-code')">📋 Copy</button><code id="py-code"># TheraSwitchRx API - Python Example
+import requests
+
+response = requests.post(
+    'http://localhost:5000/api/v1/search',
+    headers={'X-API-Key': 'tsx_your_api_key_here'},
+    json={'query': 'alternatives for Paracetamol'}
+)
+
+data = response.json()
+print(data['data']['recommendation'])</code></pre>
+                </div>
+
+                <div id="curl" class="code-content">
+                    <pre><button class="copy-btn" onclick="copyCode('curl-code')">📋 Copy</button><code id="curl-code"># TheraSwitchRx API - cURL Example
+curl -X POST http://localhost:5000/api/v1/search \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: tsx_your_api_key_here" \
+  -d '{"query": "alternatives for Paracetamol"}'</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Base URL</h2>
+            <p>All API requests should be made to:</p>
+            <pre><code>http://localhost:5000/api/v1</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>🔐 Authentication</h2>
+            <p>Most endpoints require an API key. Include your API key in the request headers:</p>
+            <pre><code>X-API-Key: tsx_your_api_key_here</code></pre>
+            <p>Or as an Authorization header:</p>
+            <pre><code>Authorization: Bearer tsx_your_api_key_here</code></pre>
+        </div>
+
+        <div id="endpoints" class="section">
+            <h2>📋 API Endpoints</h2>
+
+            <div class="endpoint">
+                <h3>
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/search</span>
+                    <span class="auth-required">🔐 Auth Required</span>
+                </h3>
+                <p><strong>Description:</strong> Get AI-powered medicine alternatives and recommendations</p>
+                
+                <h4>Request Body:</h4>
+                <pre><code>{
+  "query": "alternatives for Paracetamol"
+}</code></pre>
+
+                <h4>Response:</h4>
+                <div class="response-example">
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "query": "alternatives for Paracetamol",
+    "recommendation": "AI-generated recommendation text...",
+    "metadata": {
+      "timestamp": "2024-01-01T12:00:00",
+      "request_id": "uuid-here",
+      "database_size": "6+ Lakh medicines",
+      "processing_type": "AI-powered analysis"
+    }
+  },
+  "message": "Recommendations generated successfully",
+  "api_usage": {
+    "requests_remaining": 95,
+    "plan": "free"
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>
+                    <span class="method get">GET</span>
+                    <span class="endpoint-url">/medicine/{medicine_name}</span>
+                    <span class="auth-required">🔐 Auth Required</span>
+                </h3>
+                <p><strong>Description:</strong> Get detailed information about a specific medicine</p>
+                <p><strong>Example:</strong> <code>/api/v1/medicine/Paracetamol</code></p>
+                
+                <h4>Response:</h4>
+                <div class="response-example">
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "medicine_name": "Paracetamol",
+    "information": "Detailed medicine information...",
+    "timestamp": "2024-01-01T12:00:00"
+  },
+  "message": "Information retrieved successfully"
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/alternatives</span>
+                    <span class="auth-required">🔐 Auth Required</span>
+                </h3>
+                <p><strong>Description:</strong> Get alternatives for multiple medicines (max 10 per request)</p>
+                
+                <h4>Request Body:</h4>
+                <pre><code>{
+  "medicines": ["Paracetamol", "Crocin", "Ibuprofen"]
+}</code></pre>
+
+                <h4>Response:</h4>
+                <div class="response-example">
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "results": {
+      "Paracetamol": {
+        "alternatives": "Alternative medicines...",
+        "status": "success"
+      }
+    },
+    "processed_count": 3
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/get-api-key</span>
+                    <span style="background: #48bb78; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; margin-left: 10px;">🔓 Public</span>
+                </h3>
+                <p><strong>Description:</strong> Generate a new API key</p>
+                
+                <h4>Request Body:</h4>
+                <pre><code>{
+  "email": "user@example.com",
+  "name": "User Name",
+  "plan": "free"
+}</code></pre>
+
+                <h4>Response:</h4>
+                <div class="response-example">
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "api_key": "tsx_generated_key_here",
+    "plan": "free",
+    "daily_limit": 100,
+    "expires_at": "2025-01-01T00:00:00"
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>
+                    <span class="method get">GET</span>
+                    <span class="endpoint-url">/key-info</span>
+                    <span class="auth-required">🔐 Auth Required</span>
+                </h3>
+                <p><strong>Description:</strong> Get information about your API key</p>
+                
+                <h4>Response:</h4>
+                <div class="response-example">
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "email": "user@example.com",
+    "plan": "free",
+    "requests_remaining": 85,
+    "status": "active"
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>
+                    <span class="method get">GET</span>
+                    <span class="endpoint-url">/health</span>
+                    <span style="background: #48bb78; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; margin-left: 10px;">🔓 Public</span>
+                </h3>
+                <p><strong>Description:</strong> Check API health status</p>
+                
+                <h4>Response:</h4>
+                <div class="response-example">
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "status": "healthy",
+    "version": "1.0.0",
+    "pipeline_initialized": true,
+    "total_medicines": "6+ lakh"
+  }
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Rate Limits & Plans</h2>
+            <table class="plan-table">
+                <thead>
+                    <tr>
+                        <th>Plan</th>
+                        <th>Daily Requests</th>
+                        <th>Features</th>
+                        <th>Best For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Free</strong></td>
+                        <td>100</td>
+                        <td>All endpoints</td>
+                        <td>Testing & development</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Basic</strong></td>
+                        <td>1,000</td>
+                        <td>All endpoints + priority support</td>
+                        <td>Small applications</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pro</strong></td>
+                        <td>10,000</td>
+                        <td>All endpoints + analytics</td>
+                        <td>Production applications</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Enterprise</strong></td>
+                        <td>Unlimited</td>
+                        <td>Custom features + SLA</td>
+                        <td>Large scale applications</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>⚠️ Error Handling</h2>
+            <p>All errors return a consistent format:</p>
+            
+            <div class="error-example">
+                <pre><code>{
+  "success": false,
+  "error": "Error message",
+  "code": "ERROR_CODE"
+}</code></pre>
+            </div>
+
+            <h3>Common Error Codes:</h3>
+            <ul style="margin: 20px 0; padding-left: 20px;">
+                <li><code>MISSING_API_KEY</code> - API key not provided</li>
+                <li><code>INVALID_API_KEY</code> - API key is invalid or expired</li>
+                <li><code>RATE_LIMIT_EXCEEDED</code> - Daily limit exceeded</li>
+                <li><code>MISSING_QUERY</code> - Required query parameter missing</li>
+                <li><code>INTERNAL_ERROR</code> - Server error occurred</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>💡 Best Practices</h2>
+            <ul style="margin: 20px 0; padding-left: 20px; line-height: 1.8;">
+                <li><strong>Cache responses</strong> when possible to reduce API calls</li>
+                <li><strong>Handle errors gracefully</strong> with proper error checking</li>
+                <li><strong>Use specific queries</strong> for better AI recommendations</li>
+                <li><strong>Monitor your usage</strong> with the <code>/key-info</code> endpoint</li>
+                <li><strong>Set timeouts</strong> for your HTTP requests (recommend 30 seconds)</li>
+                <li><strong>Use HTTPS</strong> in production environments</li>
+            </ul>
+        </div>
+
+        <div class="cta-section">
+            <h2>🚀 Ready to Get Started?</h2>
+            <p>Join thousands of developers using TheraSwitchRx API to build amazing healthcare applications.</p>
+            <a href="/get-api-key" class="cta-btn">Get Your Free API Key</a>
+            <a href="/" class="cta-btn">Try the Web App</a>
+        </div>
+    </div>
+
+    <script>
+        function showCode(language) {
+            // Hide all code contents
+            document.querySelectorAll('.code-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active from all tabs
+            document.querySelectorAll('.code-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected content and activate tab
+            document.getElementById(language).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function copyCode(codeId) {
+            const code = document.getElementById(codeId).textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                // Show feedback
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy code. Please copy manually.');
+            });
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
