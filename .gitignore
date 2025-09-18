@@ -1,2 +1,10 @@
 venv1/
 logs/
+.env
+*.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+chroma_db/
+api_keys.db
