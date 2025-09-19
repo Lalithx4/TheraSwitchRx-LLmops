@@ -1,4 +1,4 @@
-# Minimal Dockerfile for testing
+# Minimal Dockerfile for testing with ML dependencies
 FROM python:3.10-slim
 
 WORKDIR /app
@@ -7,11 +7,21 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 \
 	PYTHONUNBUFFERED=1
 
+# Install system dependencies needed for ML packages
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy requirements first
 COPY requirements-minimal.txt requirements.txt
 
-# Install minimal dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies with increased timeout
+RUN pip install --no-cache-dir --timeout=300 -r requirements.txt
 
 # Copy app files
 COPY . .
