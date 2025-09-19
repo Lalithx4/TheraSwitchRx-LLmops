@@ -24,26 +24,28 @@ spec:
         - name: FLASK_ENV
           value: "production"
         - name: DISABLE_PIPELINE
-          value: "true"
+          value: "false"
         resources:
           requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
+            memory: "1Gi"
             cpu: "200m"
+          limits:
+            memory: "3Gi"
+            cpu: "500m"
         livenessProbe:
           httpGet:
             path: /api/v1/health
             port: 5000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 120
           periodSeconds: 30
+          timeoutSeconds: 10
         readinessProbe:
           httpGet:
             path: /api/v1/health
             port: 5000
-          initialDelaySeconds: 5
-          periodSeconds: 10
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 10
 
 ---
 apiVersion: v1
