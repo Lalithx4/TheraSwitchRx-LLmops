@@ -4,11 +4,12 @@ Flask-CORS==4.0.0
 python-dotenv==1.0.1
 requests==2.31.0
 
-# ML Pipeline dependencies - enabled for full functionality
-langchain==0.1.20
-langchain-community==0.0.38
+# ML Pipeline dependencies - compatible versions
+pandas==2.0.3
+langchain-core>=0.2.26,<0.3.0
+langchain>=0.2.0
+langchain-community>=0.2.0
 langchain-groq==0.1.9
 chromadb==0.4.22
-pandas==2.0.3
 sentence-transformers==2.7.0
-langchain-huggingface==0.0.3
+langchain-huggingface>=0.0.3
