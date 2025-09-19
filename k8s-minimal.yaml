@@ -25,6 +25,7 @@ spec:
           value: "production"
         - name: DISABLE_PIPELINE
           value: "false"
+
         resources:
           requests:
             memory: "1Gi"
