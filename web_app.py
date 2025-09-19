@@ -4,7 +4,6 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from pipeline.pipeline import MedRecommendationPipeline
 from api_auth import require_api_key, api_manager
 from dotenv import load_dotenv
 import logging
@@ -53,6 +52,14 @@ def init_pipeline():
     """Initialize the medical recommendation pipeline with better error handling"""
     global pipeline
     try:
+        # Allow disabling pipeline via env for minimal/lightweight images
+        if os.getenv("DISABLE_PIPELINE", "false").lower() in {"1", "true", "yes"}:
+            logger.warning("Pipeline initialization skipped due to DISABLE_PIPELINE env var")
+            pipeline = None
+            return False
+
+        # Lazy import to avoid crashing when optional heavy deps are missing
+        from pipeline.pipeline import MedRecommendationPipeline  # noqa: WPS433
         logger.info("Initializing Medical Recommendation Pipeline...")
         pipeline = MedRecommendationPipeline()
         logger.info("✅ Pipeline initialized successfully!")
@@ -502,9 +509,12 @@ if __name__ == '__main__':
         print("🌐 Starting web server...")
         print("📡 Server will be available at: http://0.0.0.0:5000")
         print("🔍 Health check available at: http://0.0.0.0:5000/api/v1/health")
-        
+
+        # Pick up port from environment (Cloud Run/GKE) with fallback to 5000
+        port = int(os.environ.get('PORT', 5000))
+
         # Start Flask app regardless of pipeline status
-        app.run(debug=False, host='0.0.0.0', port=5000)
+        app.run(debug=False, host='0.0.0.0', port=port)
         
     except Exception as e:
         print(f"💥 Critical startup error: {e}")

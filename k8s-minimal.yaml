@@ -17,9 +17,14 @@ spec:
       containers:
       - name: theraswitchrx-minimal
         image: theraswitchrx:minimal
-        imagePullPolicy: Never
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
+        env:
+        - name: FLASK_ENV
+          value: "production"
+        - name: DISABLE_PIPELINE
+          value: "true"
         resources:
           requests:
             memory: "256Mi"

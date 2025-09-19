@@ -25,6 +25,8 @@ spec:
             value: "production"
           - name: BASE_URL
             value: "https://your-domain.com"
+          - name: DISABLE_PIPELINE
+            value: "true"
         resources:
           requests:
             memory: "512Mi"
