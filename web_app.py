@@ -58,8 +58,9 @@ def init_pipeline():
         logger.info("✅ Pipeline initialized successfully!")
         return True
     except Exception as e:
-        logger.error(f"❌ Failed to initialize pipeline: {e}")
+        logger.error(f"❌ Failed to initialize pipeline: {str(e)}")
         logger.warning("⚠️ Starting Flask app without ML pipeline - API will use fallback responses")
+        logger.info("🔄 App will continue running with fallback mode")
         pipeline = None
         return False
 
@@ -487,14 +488,25 @@ def health_check():
     })
 
 if __name__ == '__main__':
-    print("🚀 Starting TheraSwitchRx | by MedQ AI...")
-    
-    # Initialize the pipeline (but don't exit if it fails)
-    init_pipeline()
-    
-    print("🌐 Starting web server...")
-    print("📡 Server will be available at: http://0.0.0.0:5000")
-    print("🔍 Health check available at: http://0.0.0.0:5000/api/v1/health")
-    
-    # Start Flask app regardless of pipeline status
-    app.run(debug=False, host='0.0.0.0', port=5000)
+    try:
+        print("🚀 Starting TheraSwitchRx | by MedQ AI...")
+        
+        # Initialize the pipeline (but don't exit if it fails)
+        pipeline_success = init_pipeline()
+        
+        if pipeline_success:
+            print("✅ AI Pipeline: ACTIVE")
+        else:
+            print("⚠️ AI Pipeline: FALLBACK MODE")
+        
+        print("🌐 Starting web server...")
+        print("📡 Server will be available at: http://0.0.0.0:5000")
+        print("🔍 Health check available at: http://0.0.0.0:5000/api/v1/health")
+        
+        # Start Flask app regardless of pipeline status
+        app.run(debug=False, host='0.0.0.0', port=5000)
+        
+    except Exception as e:
+        print(f"💥 Critical startup error: {e}")
+        print("🚨 App failed to start. Check logs above.")
+        # Don't exit - let container restart handle it
