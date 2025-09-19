@@ -2,6 +2,10 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_community.document_loaders.csv_loader import CSVLoader
 from langchain_huggingface import HuggingFaceEmbeddings
+import warnings
+
+# Suppress deprecation warnings for now
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from dotenv import load_dotenv
 load_dotenv()

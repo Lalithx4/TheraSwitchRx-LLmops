@@ -25,16 +25,42 @@ CORS(app)
 # Global pipeline instance
 pipeline = None
 
+def get_fallback_response(query):
+    """Provide fallback response when pipeline is not available"""
+    return f"""
+**Alternative Medicines for "{query}":**
+
+⚠️ **Note**: Our AI recommendation system is temporarily unavailable. Here are general guidelines:
+
+🔍 **Finding Alternatives:**
+1. **Generic Alternatives**: Look for medicines with the same active ingredients
+2. **Same Therapeutic Class**: Consult medicines in the same category
+3. **Pharmacist Consultation**: Visit your local pharmacy for recommendations
+4. **Doctor Consultation**: Always consult your healthcare provider for prescription alternatives
+
+💊 **General Tips:**
+- Check the active ingredients on medicine labels
+- Compare dosage strengths
+- Consider brand vs generic options
+- Verify with healthcare professionals
+
+🏥 **Important**: This is a basic response due to system maintenance. For accurate medical advice, please consult healthcare professionals.
+
+**System Status**: Pipeline temporarily unavailable - basic response provided.
+"""
+
 def init_pipeline():
-    """Initialize the medical recommendation pipeline"""
+    """Initialize the medical recommendation pipeline with better error handling"""
     global pipeline
     try:
         logger.info("Initializing Medical Recommendation Pipeline...")
         pipeline = MedRecommendationPipeline()
-        logger.info("Pipeline initialized successfully!")
+        logger.info("✅ Pipeline initialized successfully!")
         return True
     except Exception as e:
-        logger.error(f"Failed to initialize pipeline: {e}")
+        logger.error(f"❌ Failed to initialize pipeline: {e}")
+        logger.warning("⚠️ Starting Flask app without ML pipeline - API will use fallback responses")
+        pipeline = None
         return False
 
 @app.route('/')
@@ -65,15 +91,21 @@ def search_medicines():
                 'error': 'Please provide a search query'
             }), 400
 
-        if pipeline is None:
-            return jsonify({
-                'success': False,
-                'error': 'Medical recommendation system is not initialized'
-            }), 500
-
-        # Get recommendations from your existing pipeline
+        # Get recommendations from pipeline or fallback
         logger.info(f"Processing query: {query}")
-        recommendation = pipeline.recommend(query)
+        
+        if pipeline is None:
+            logger.warning("Using fallback response - pipeline not available")
+            recommendation = get_fallback_response(query)
+            is_fallback = True
+        else:
+            try:
+                recommendation = pipeline.recommend(query)
+                is_fallback = False
+            except Exception as e:
+                logger.error(f"Pipeline error, using fallback: {e}")
+                recommendation = get_fallback_response(query)
+                is_fallback = True
         
         # Enhance the response with additional metadata
         enhanced_recommendation = f"""
@@ -135,16 +167,21 @@ def api_v1_search():
                 "code": "EMPTY_QUERY"
             }), 400
 
-        if pipeline is None:
-            return jsonify({
-                "success": False,
-                "error": "Medical recommendation system is not initialized",
-                "code": "PIPELINE_ERROR"
-            }), 500
-
-        # Get recommendations from pipeline
+        # Get recommendations from pipeline or fallback
         logger.info(f"API v1 request from {request.api_user['user_email']}: {query}")
-        recommendation = pipeline.recommend(query)
+        
+        if pipeline is None:
+            logger.warning("Using fallback response - pipeline not available")
+            recommendation = get_fallback_response(query)
+            is_fallback = True
+        else:
+            try:
+                recommendation = pipeline.recommend(query)
+                is_fallback = False
+            except Exception as e:
+                logger.error(f"Pipeline error, using fallback: {e}")
+                recommendation = get_fallback_response(query)
+                is_fallback = True
         
         # Enhanced response
         enhanced_recommendation = f"""
@@ -169,8 +206,10 @@ def api_v1_search():
                     "timestamp": datetime.now().isoformat(),
                     "request_id": str(uuid.uuid4()),
                     "database_size": "6+ Lakh medicines",
-                    "processing_type": "AI-powered analysis",
-                    "response_time": "< 2 seconds"
+                    "processing_type": "AI-powered analysis" if not is_fallback else "Fallback response",
+                    "response_time": "< 2 seconds",
+                    "is_fallback": is_fallback,
+                    "pipeline_status": "active" if pipeline is not None else "maintenance"
                 }
             },
             "message": "Recommendations generated successfully",
@@ -450,11 +489,12 @@ def health_check():
 if __name__ == '__main__':
     print("🚀 Starting TheraSwitchRx | by MedQ AI...")
     
-    # Initialize the pipeline
-    if init_pipeline():
-        print("✅ Pipeline initialized successfully!")
-        print("🌐 Starting web server...")
-        app.run(debug=True, host='0.0.0.0', port=5000)
-    else:
-        print("❌ Failed to initialize pipeline. Please check your configuration.")
-        sys.exit(1)
+    # Initialize the pipeline (but don't exit if it fails)
+    init_pipeline()
+    
+    print("🌐 Starting web server...")
+    print("📡 Server will be available at: http://0.0.0.0:5000")
+    print("🔍 Health check available at: http://0.0.0.0:5000/api/v1/health")
+    
+    # Start Flask app regardless of pipeline status
+    app.run(debug=False, host='0.0.0.0', port=5000)

@@ -2,15 +2,15 @@
 Flask==2.3.3
 Flask-CORS==4.0.0
 
-# AI/ML Dependencies
-langchain
-langchain-community
-langchain_groq
-chromadb
-pandas
-python-dotenv
-sentence-transformers
-langchain_huggingface
+# AI/ML Dependencies - Fixed versions to avoid deprecation
+langchain==0.1.20
+langchain-community==0.0.38
+langchain-groq==0.1.9
+chromadb==0.4.22
+pandas==2.0.3
+python-dotenv==1.0.1
+sentence-transformers==2.7.0
+langchain-huggingface==0.0.3
 
 # Additional dependencies
 requests==2.31.0
