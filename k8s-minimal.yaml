@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: theraswitchrx-minimal
+  labels:
+    app: theraswitchrx-minimal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: theraswitchrx-minimal
+  template:
+    metadata:
+      labels:
+        app: theraswitchrx-minimal
+    spec:
+      containers:
+      - name: theraswitchrx-minimal
+        image: theraswitchrx:minimal
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: theraswitchrx-minimal-service
+  labels:
+    app: theraswitchrx-minimal
+spec:
+  type: LoadBalancer
+  selector:
+    app: theraswitchrx-minimal
+  ports:
+  - port: 80
+    targetPort: 5000
+    protocol: TCP
+    name: http
