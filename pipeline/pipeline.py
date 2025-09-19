@@ -11,9 +11,18 @@ class MedRecommendationPipeline:
         try:
             logger.info("Intializing Recommdation Pipeline")
 
-            vector_builder = VectorStoreBuilder(csv_path="" , persist_dir=persist_dir)
+            vector_builder = VectorStoreBuilder(csv_path="data/indian_medicine_all_with_alternatives.csv" , persist_dir=persist_dir)
 
-            retriever = vector_builder.load_vector_store().as_retriever()
+            # Try to load existing vector store, if it fails, build a new one
+            try:
+                retriever = vector_builder.load_vector_store().as_retriever()
+                logger.info("Loaded existing vector store")
+            except Exception as load_error:
+                logger.info(f"Failed to load existing vector store: {load_error}")
+                logger.info("Building new vector store from CSV data...")
+                vector_builder.build_and_save_vectorstore()
+                retriever = vector_builder.load_vector_store().as_retriever()
+                logger.info("Built and loaded new vector store")
 
             self.recommender = MedRecommender(retriever,GROQ_API_KEY,MODEL_NAME)
 
