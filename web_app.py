@@ -89,6 +89,7 @@ def api_documentation():
 @app.route('/api/search', methods=['POST'])
 def search_medicines():
     """API endpoint for medicine search"""
+    global pipeline
     try:
         data = request.get_json()
         query = data.get('query', '').strip()
@@ -157,6 +158,7 @@ def api_v1_search():
     Headers: X-API-Key: your_api_key_here
     Body: {"query": "medicine name or condition"}
     """
+    global pipeline
     try:
         data = request.get_json()
         
@@ -240,6 +242,7 @@ def api_v1_search():
 @require_api_key
 def get_medicine_info(medicine_name):
     """Get detailed information about a specific medicine"""
+    global pipeline
     try:
         if pipeline is None:
             return jsonify({
@@ -281,6 +284,7 @@ def get_bulk_alternatives():
     Get alternatives for multiple medicines
     Body: {"medicines": ["med1", "med2", "med3"]}
     """
+    global pipeline
     try:
         data = request.get_json()
         
