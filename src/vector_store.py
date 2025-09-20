@@ -31,7 +31,7 @@ class VectorStoreBuilder:
         return db
 
     def load_vector_store(self):
-        return Chroma(persist_directory=self.persist_dir, embedding_function=self.embeddings)
+        return Chroma(persist_directory=self.persist_dir, embeddings=self.embeddings)
 
     
 
