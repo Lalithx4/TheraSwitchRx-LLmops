@@ -1,4 +1,4 @@
-from src.vector_store import VectorStoreBuilder
+from src.vector_store import VectorStoreBuilderCompat
 from src.recommender import MedRecommender
 from config.config import GROQ_API_KEY,MODEL_NAME
 from utils.logger import get_logger
@@ -11,7 +11,7 @@ class MedRecommendationPipeline:
         try:
             logger.info("Intializing Recommdation Pipeline")
 
-            vector_builder = VectorStoreBuilder(csv_path="data/indian_medicine_all_with_alternatives.csv" , persist_dir=persist_dir)
+            vector_builder = VectorStoreBuilderCompat(csv_path="data/indian_medicine_all_with_alternatives.csv" , persist_dir=persist_dir)
 
             # Try to load existing vector store, if it fails, build a new one
             try:
