@@ -25,6 +25,8 @@ spec:
           value: "production"
         - name: DISABLE_PIPELINE
           value: "false"
+        - name: GROQ_API_KEY
+          value: "gsk_YOUR_GROQ_API_KEY_HERE"
 
         resources:
           requests:
